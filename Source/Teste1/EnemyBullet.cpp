@@ -11,14 +11,8 @@ void AEnemyBullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* O
 	if (OtherActor != nullptr && OtherActor->IsA(AMyChar::StaticClass())) {
 		UE_LOG(LogTemp, Warning, TEXT("Destroy"));
 		AMyChar* Char = Cast<AMyChar>(OtherActor);
-		int MyValue;
-		if (GetActorLocation().X >= Char->GetActorLocation().X) {
-			MyValue = 1;
-		}
-		else {
-			MyValue = -1;
-		}
-		Char->TakeHit(MyValue);
+
+		Char->TakeHit();
 		Destroy();
 	}
 }

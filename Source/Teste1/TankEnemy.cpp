@@ -10,11 +10,15 @@
 ATankEnemy::ATankEnemy() {
 	Direction = 1;
 
+	
+
 	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComp"));
 	CollisionComp->bGenerateOverlapEvents = true;
 	CollisionComp->SetCollisionProfileName("BlockAllDynamic");
 	CollisionComp->OnComponentHit.AddDynamic(this, &ATankEnemy::OnHit);
 	RootComponent = CollisionComp;
+
+	GetFlipbookComp()->SetupAttachment(CollisionComp);
 }
 
 void ATankEnemy::BeginPlay()
@@ -69,16 +73,9 @@ void ATankEnemy::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 
 		AMyChar* Char = Cast<AMyChar>(OtherActor);
 
-		int MyValue;
-		if (GetActorLocation().X >= Char->GetActorLocation().X) {
-			MyValue = 1;
-		}
-		else {
-			MyValue = -1;
-		}
-		Char->TakeHit(MyValue);
+		Char->TakeHit();
 
-		UE_LOG(LogTemp, Warning, TEXT("%d"), Char->GetLife());
+		
 
 	}
 }

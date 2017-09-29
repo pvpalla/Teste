@@ -37,13 +37,15 @@ public:
 	void StopFire();
 	UFUNCTION(BlueprintCallable, Category = "TakeGun")
 	void DropAndTake();
+	UFUNCTION(BlueprintCallable, Category = "DropWeapon")
+		void DropWeapon();
 
 	void AddGunToArray(AGun * Gun);
 
 	void SetLife(int NewLife);
 	int GetLife();
 
-	void TakeHit(int Value);
+	void TakeHit();
 
 private:
 

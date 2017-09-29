@@ -30,6 +30,8 @@ AMyChar::AMyChar() {
 	CameraComp->SetupAttachment(CameraBoom);
 
 	GunInUse = -1;
+
+	Life = 3;
 /*
 	UClass* Pis = StaticLoadClass(AGun::StaticClass(), NULL, TEXT("Blueprint'/Game/Blueprints/PistolBP.PistolBP_C' "));
 	if (Pis) {
@@ -59,6 +61,7 @@ void AMyChar::BeginPlay() {
 	Super::BeginPlay();
 
 	InitialLocation = GetActorLocation();
+	Life = 3;
 	/*
 	UClass* Pis = StaticLoadClass(AGun::StaticClass(), NULL, TEXT("Blueprint'/Game/Blueprints/PistolBP.PistolBP_C' "));
 	UClass* Snip = StaticLoadClass(AGun::StaticClass(), NULL, TEXT("Blueprint'/Game/Blueprints/SniperBP.SniperBP_C' "));
@@ -107,6 +110,7 @@ void AMyChar::SetupPlayerInputComponent(UInputComponent * PlayerInputComponent)
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AMyChar::StartFire);
 	PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AMyChar::StopFire);
 	PlayerInputComponent->BindAction("Drop/Take", IE_Pressed, this, &AMyChar::DropAndTake);
+	PlayerInputComponent->BindAction("DropWeapon", IE_Pressed, this, &AMyChar::DropWeapon);
 
 }
 
@@ -270,13 +274,23 @@ int AMyChar::GetLife()
 	return Life;
 }
 
-void AMyChar::TakeHit(int Value) {
+void AMyChar::TakeHit() {
+
+	UE_LOG(LogTemp, Warning, TEXT("%d"), Life);
 
 	Life = Life - 1;
 
-	if (Life == 0) {
+	if (Life <= 0) {
 		Life = 3;
 		SetActorLocation(InitialLocation);
 	}
 
+}
+
+
+void AMyChar::DropWeapon() {
+	if (GunInUse >= 0) {
+		Guns[GunInUse]->Destroy();
+		GunInUse = -1;
+	}
 }
